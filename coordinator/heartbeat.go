@@ -2,6 +2,7 @@ package main
 
 import (
   "time"
+  // "fmt"
   //log "github.com/sirupsen/logrus"
 )
 
@@ -38,6 +39,7 @@ func coro_heartbeat( uuid string, pubEventCh chan<- PubEvent ) ( chan<- bool ) {
                 } ).Info("Heartbeat")*/
             }
             time.Sleep( time.Second * 5 )
+            // fmt.Printf("-------heartbeat.go---------")
             count++;
         }
     }()

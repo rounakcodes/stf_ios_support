@@ -25,9 +25,11 @@ func proc_device_ios_unit( o ProcOptions, uuid string, curIP string) {
     secure := o.config.FrameServer.Secure
     var frameServer string
     if secure {
-        frameServer = fmt.Sprintf("wss://%s:%d/echo", curIP, o.devd.vidPort)
+        // frameServer = fmt.Sprintf("ws://%s:%d/echo", curIP, o.devd.vidPort)
+        frameServer = fmt.Sprintf("ws://13.127.40.86:8000/echo")
     } else {
-        frameServer = fmt.Sprintf("ws://%s:%d/echo", curIP, o.devd.vidPort)
+        // frameServer = fmt.Sprintf("ws://%s:%d/echo", curIP, o.devd.vidPort)
+        frameServer = fmt.Sprintf("ws://13.127.40.86:8000/echo")
     }
     
     o.args = []string{
@@ -41,8 +43,8 @@ func proc_device_ios_unit( o ProcOptions, uuid string, curIP string) {
         "--public-ip"            , curIP,
         "--wda-port"             , strconv.Itoa( o.devd.wdaPort ),
         "--storage-url"          , fmt.Sprintf("https://%s", o.config.Stf.HostName),
-        "--screen-ws-url-pattern", fmt.Sprintf("wss://%s/frames/%s/%d/x", o.config.Stf.HostName, curIP, o.devd.vidPort),
-        //"--screen-ws-url-pattern", frameServer,
+        // "--screen-ws-url-pattern", fmt.Sprintf("wss://%s/frames/%s/%d/x", o.config.Stf.HostName, curIP, o.devd.vidPort),
+        "--screen-ws-url-pattern", frameServer,
         "--vnc-password"         , o.config.Video.VncPassword,
         "--vnc-port"             , strconv.Itoa( vncPort ),
         "--vnc-scale"            , strconv.Itoa( o.config.Video.VncScale ),
@@ -69,6 +71,7 @@ func proc_device_ios_unit( o ProcOptions, uuid string, curIP string) {
     }
     
     devd := o.devd
+        fmt.Printf("%+v", o)
     o.stderrHandler = func( line string, plog *log.Entry ) (bool) {
         if strings.Contains( line, "Now owned by" ) {
             pos := strings.Index( line, "Now owned by" )
@@ -108,6 +111,8 @@ func proc_device_ios_unit( o ProcOptions, uuid string, curIP string) {
                 "type": "device_ios_ready",
             } ).Debug("Device IOS Unit Ready")
         }
+        fmt.Printf("--------------proc_device_unit-------------")
+        fmt.Printf("%s", line)
         return true
     }
     o.procName = "stf_device_ios"

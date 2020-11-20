@@ -9,6 +9,7 @@ import (
 )
 
 func restart_wdaproxy( devd *RunningDev, onRelease bool ) {
+    fmt.Printf("-------proc_wdaproxy: restart_wdaproxy-------")
     if onRelease {
         test_restart_on_release( devd )
         return
@@ -16,6 +17,7 @@ func restart_wdaproxy( devd *RunningDev, onRelease bool ) {
     restart_proc_generic( devd, "wdaproxy" )
 }
 func wait_wdaup( devd *RunningDev ) {
+    fmt.Printf("-------proc_wdaproxy: wait_wdaup-------")
     for {
         if devd.wda == true { break }
         time.Sleep( time.Second * 10 )

@@ -130,6 +130,7 @@ func handleRoot( w http.ResponseWriter, r *http.Request, baseProgs *BaseProgs, r
         wda := "<font color='green'>up</font>"
         
         proxyProc := dev.process["wdaproxy"]
+        fmt.Printf("--------------http_server: wdaproxy")
         proxy := "<font color='green'>on</font>"
         if proxyProc == nil || proxyProc.cmd == nil {
             proxy = "off"

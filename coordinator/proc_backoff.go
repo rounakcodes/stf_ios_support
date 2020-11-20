@@ -1,6 +1,7 @@
 package main
 
-import "time"
+import ( "time" 
+"fmt")
 
 type Backoff struct {
     fails          int
@@ -20,6 +21,7 @@ func ( self *Backoff ) markEnd() ( float64 ) {
 }
 
 func ( self *Backoff ) wait() {
+    fmt.Printf("-----------BACKOFF------------")
     sleeps := []int{ 0, 0, 2, 5, 10 }
     numSleeps := len( sleeps )
     if self.elapsedSeconds < 20 {

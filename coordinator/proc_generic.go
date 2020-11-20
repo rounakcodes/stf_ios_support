@@ -4,6 +4,7 @@ import (
   log "github.com/sirupsen/logrus"
   gocmd "github.com/go-cmd/cmd"
   "time"
+  // "fmt"
 )
 
 type OutputHandler func( string, *log.Entry ) (bool)
@@ -155,6 +156,7 @@ func proc_generic( opt ProcOptions ) ( *GenericProc ) {
                 case <- statCh:
                     runDone = true
                 case msg := <- controlCh:
+                    // fmt.Printf("-----------PROC_GENERIC: MSG------------")
                     plog.Debug("Got stop request on control channel")
                     if msg.msgType == 1 { // stop
                         stop = true
@@ -163,10 +165,12 @@ func proc_generic( opt ProcOptions ) ( *GenericProc ) {
                         proc.cmd.Stop()
                     }
                 case line := <- outStream:
+                    // fmt.Printf("-----------PROC_GENERIC: LINE------------")
                     doLog := true
                     if opt.stdoutHandler != nil { doLog = opt.stdoutHandler( line, plog ) }
                     if doLog { lineLog.WithFields( log.Fields{ "line": line } ).Info(""); }
                 case line := <- errStream:
+                    // fmt.Printf("-----------PROC_GENERIC: ERR------------")
                     doLog := true
                     if opt.stderrHandler != nil { doLog = opt.stderrHandler( line, plog ) }
                     if doLog { lineLog.WithFields( log.Fields{ "line": line, "iserr": true } ).Info("") }

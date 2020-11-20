@@ -1,7 +1,8 @@
 package main
 
 import (
-    "time"  
+    "time"
+    "fmt"
 )
 
 func do_restart( config *Config, devd *RunningDev ) {
@@ -32,6 +33,8 @@ func periodic_start( config *Config, devd *RunningDev ) {
             if wdaRestartMinutes != 0 {
                 if ( minute % wdaRestartMinutes ) == 0 { // every 4 hours by default
                     if devd.owner == "" {
+                        fmt.Printf("logging: periodic.go")
+                        fmt.Printf("devd owner is null")
                         do_restart( config, devd )
                     } else {
                         restart_closure := func() { do_restart( config, devd ) }

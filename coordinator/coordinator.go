@@ -8,7 +8,7 @@ import (
     "os"
     "os/exec"
     "path/filepath"
-    //"strconv"
+    "strconv"
     "strings"
     "sync"
     "time"
@@ -591,6 +591,8 @@ func event_loop(
             }
             
         case devEvent := <- devEventCh:
+                                    fmt.Printf("---------DEVEVENT------------")
+
             if gStop { break }
             uuid := devEvent.uuid
     
@@ -634,15 +636,19 @@ func event_loop(
                     proc_ios_video_stream( o, tunName )
                     
                     if videoMethod == "avfoundation" {
+                        fmt.Printf("logging: coordinator")
+                        fmt.Printf("video method 1")
                     	proc_video_enabler( o )
                         proc_ivf( o )
                     } else if videoMethod == "ivp" {
+                        fmt.Printf("video method 2")
                         proc_h264_to_jpeg( o )
                         proc_ios_video_pull( o )
                     }
                 }
             }
             if devEvent.action == 1 { // device disconnect
+                        fmt.Printf("disconnect start")
                 log.WithFields( log.Fields{
                     "type":     "dev_disconnect",
                     "dev_name": devd.name,
@@ -665,8 +671,10 @@ func event_loop(
                 pubEvent.wdaPort = 0
                 pubEvent.vidPort = 0
                 pubEventCh <- pubEvent
+                        fmt.Printf("disconnect complete")
             }
             if devEvent.action == 2 { // video interface available
+                                    fmt.Printf("---------VIDEO INTERFACE AVAILABLE------------")
                 devd.okVidInterface = true
                 log.WithFields( log.Fields{
                     "type":     "vid_available",
@@ -706,7 +714,7 @@ func event_loop(
                     uuid: uuid,
                 }              
               
-                wdaBase := "http://127.0.0.1:8100"
+                wdaBase := "http://127.0.0.1:" + strconv.Itoa(wdaPort)
                 var sessionId string
                 try := 0
                 for {
@@ -723,17 +731,19 @@ func event_loop(
                         //root.Dump()
                         sessionNode := root.Get("sessionId")
                         if sessionNode == nil {
+                            fmt.Printf("--------coordinator: sessionNode == nil--------------")
                             wda := NewWDACaller( wdaBase )
                             sessionId = wda.create_session( "com.apple.Preferences" )
                         } else {
+                            fmt.Printf("--------coordinator: sessionNode not nil--------------")
                             sessionId = sessionNode.String()
                         }
                         
                         break
                     }
-                    //fmt.Printf("trying again to getting wda session\n")
                     try++
                     if try > 6 {
+                        fmt.Printf("TRY ATTEMPTED")
                         break
                     }
                     time.Sleep( time.Second * 1 )
@@ -778,6 +788,7 @@ func event_loop(
                     devd.heartbeatChan = coro_heartbeat( uuid, pubEventCh )
                 }
                 
+                            fmt.Printf("--------coordinator: continue_dev_start--------------")
                 continue_dev_start( o, curIP )
             }
             if devEvent.action == 5 { // WDA Startup failed
@@ -865,6 +876,8 @@ func continue_dev_start( o ProcOptions, curIP string ) {
     
     if !o.devd.devUnitStarted {
         o.devd.devUnitStarted = true
+        fmt.Printf("logging")
+        fmt.Printf("%+v\n", o)
         proc_device_ios_unit( o, uuid, curIP )
     }
 }

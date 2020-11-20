@@ -268,7 +268,7 @@ repos/ios_video_pull:
 repos/WebDriverAgent/WebDriverAgent.xcodeproj: repos/WebDriverAgent
 
 repos/WebDriverAgent:
-	$(eval REPO=$(shell jq '.repo_wda // "https://github.com/nanoscopic/WebDriverAgent.git"' config.json -j))
+	$(eval REPO=$(shell jq '.repo_wda // "https://github.com/appium/WebDriverAgent.git"' config.json -j))
 	$(eval REPO_BR=$(shell jq '.repo_wda_branch // "master"' config.json -j))
 	git clone $(REPO) repos/WebDriverAgent --branch $(REPO_BR)
 

@@ -101,6 +101,8 @@ func ( self *WDAType ) el_by_name( sid string, name string ) ( string ) {
 }
 
 func ( self *WDAType ) click( sid string, eid string ) {
+  fmt.Printf("--------------wda.go: click")
+  fmt.Printf("%s", self.base)
   url := self.base + "/session/" + sid + "/element/" + eid + "/click"
   log.Info( "visiting " + url )
   resp, _ := http.Post( url, "application/json", strings.NewReader( "{}" ) )

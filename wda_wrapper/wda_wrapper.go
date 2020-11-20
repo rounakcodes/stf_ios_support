@@ -63,12 +63,14 @@ func proc_wdaproxy(
             } else if strings.Contains( line, "Couldn't write value" ) {
             } else if strings.Contains( line, "GET /status " ) {
             } else if strings.Contains( line, "] Error" ) {
+    fmt.Printf("--------------wda_wrapper: wda_wrapper.go if")
                 msgCoord( map[string]string{
                   "type": "wda_error",
                   "line": line,
                   "uuid": uuid,
                 } )
             } else {
+    fmt.Printf("--------------wda_wrapper: wda_wrapper.go else")
                 log.WithFields( log.Fields{
                     "type": "proc_stdout",
                     "line": line,
@@ -233,16 +235,19 @@ func setup_zmq() {
 }
 
 func close_zmq() {
+    fmt.Printf("--------------wda_wrapper: close_zmq")
     reqSock.Destroy()
     reqOb.Destroy()
 }
 
 func msgCoord( content map[string]string ) {
+    fmt.Printf("--------------wda_wrapper: msgCoord")
     data, _ := json.Marshal( content )
     zmqRequest( data )
 }
 
 func zmqRequest( jsonOut []byte ) {
+    fmt.Printf("--------------wda_wrapper: zmqRequest")
     err := reqSock.SendMessage( [][]byte{ jsonOut } )
     if err != nil {
         log.WithFields( log.Fields{
@@ -253,9 +258,11 @@ func zmqRequest( jsonOut []byte ) {
 }
 
 func coro_sigterm() {
+    fmt.Printf("--------------wda_wrapper: coro_sigterm---------")
     c := make(chan os.Signal, 2)
     signal.Notify(c, os.Interrupt, syscall.SIGTERM)
     go func() {
+
         <- c
         exit = true
 
