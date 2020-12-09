@@ -25,11 +25,11 @@ func proc_device_ios_unit( o ProcOptions, uuid string, curIP string) {
     secure := o.config.FrameServer.Secure
     var frameServer string
     if secure {
-        // frameServer = fmt.Sprintf("ws://%s:%d/echo", curIP, o.devd.vidPort)
-        frameServer = fmt.Sprintf("ws://13.127.40.86:8000/echo")
+         //frameServer = fmt.Sprintf("wss://%s:%d/echo", curIP, o.devd.vidPort)
+        frameServer = fmt.Sprintf("ws://13.233.9.125:8000/echo")
     } else {
-        // frameServer = fmt.Sprintf("ws://%s:%d/echo", curIP, o.devd.vidPort)
-        frameServer = fmt.Sprintf("ws://13.127.40.86:8000/echo")
+         //frameServer = fmt.Sprintf("ws://%s:%d/echo", curIP, o.devd.vidPort)
+        frameServer = fmt.Sprintf("ws://13.233.9.125:8000/echo")
     }
     
     o.args = []string{
